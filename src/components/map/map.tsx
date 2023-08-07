@@ -18,6 +18,22 @@ const Map = () => {
 
   const icons = useAppSelector(selectIcons);
 
+  const drawMarkers = () => {
+    if (mapIconRef.current) {
+      setMakers([]);
+      const newMarkers = [];
+      for (let i = 0; i < icons.length; i++) {
+        const customIconEl = document.createElement('div');
+        customIconEl.innerHTML = `<img src="${icons[i].path}" width="25" height="25" />`;
+        const marker = new mapboxgl.Marker(customIconEl)
+          .setLngLat({ lng: icons[i].lng, lat: icons[i].lat })
+          .addTo(mapIconRef.current);
+        newMarkers.push(marker);
+      }
+      setMakers(newMarkers);
+    }
+  };
+
   useEffect(() => {
     if (process.env.REACT_APP_MAPBOXGL_API_KEY === undefined) {
       throw new Error('REACT_APP_MAPBOXGL_API_KEY is undefined');
@@ -60,6 +76,7 @@ const Map = () => {
           source: 'building-image',
           paint: { 'raster-opacity': 0.85 }, // adjust transparency as needed
         });
+        drawMarkers();
       });
       map.on('click', function (evt) {
         const lngLat = evt.lngLat;
@@ -79,16 +96,7 @@ const Map = () => {
         markers[i].remove();
       }
       setMakers([]);
-      const newMarkers = [];
-      for (let i = 0; i < icons.length; i++) {
-        const customIconEl = document.createElement('div');
-        customIconEl.innerHTML = `<img src="${icons[i].path}" width="25" height="25" />`;
-        const marker = new mapboxgl.Marker(customIconEl)
-          .setLngLat({ lng: icons[i].lng, lat: icons[i].lat })
-          .addTo(mapIconRef.current);
-        newMarkers.push(marker);
-      }
-      setMakers(newMarkers);
+      drawMarkers();
     }
   }, [icons]);
 
