@@ -1,0 +1,16 @@
+.menu-item {
+  padding: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 3px;
+}
+
+.selected {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.menu-icon {
+  width: 30px;
+  height: 40px;
+  padding: 0 10px;
+}
